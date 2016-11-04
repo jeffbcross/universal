@@ -29,6 +29,13 @@
       "angular2-platform-node": [
         "./modules/platform-node"
       ],
+      "platform-node": [
+        "./modules/platform-node",
+        "./modules/platform-node/*.ts"
+      ],
+      "platform-node/parse5-adapter": [
+        "./modules/platform-node/parse5-adapter.ts"
+      ],
       "angular2-universal/browser": [
         "./modules/universal/browser"
       ],
@@ -59,6 +66,7 @@
     "modules/universal-polyfills/src/prod.ts",
     "modules/universal-polyfills/src/test.ts",
     "modules/universal-polyfills/src/zone-browser.ts",
+    "modules/universal/src/node/universal-module_spec.ts",
     "modules/universal/src/node/index.ts",
     "modules/universal/src/browser/index.ts",
     "modules/platform-node/parse5.d.ts",

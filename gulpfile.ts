@@ -22,6 +22,7 @@ const rename = require('gulp-rename');
 
 // For any task that contains "test" or if --test arg is passed, include spec files
 const isTest = process.argv[2] && process.argv[2].indexOf('test') > -1 || args['test'] ? true : false;
+console.log('isTest?', isTest);
 const files = buildUtils.getTargetFiles(isTest, args['module'], tsConfig);
 const compilerOptions = buildUtils.getCompilerOptions(tsConfig);
 const host = ts.createCompilerHost(compilerOptions);
@@ -33,8 +34,8 @@ gulp.task('watch', () => {
 });
 
 gulp.task('test:watch', ['test'], () => {
-  gulp.watch(sourceFiles, () => {
-    runSequence('build', '_test');
+  return gulp.watch(sourceFiles, () => {
+      runSequence('build', '_test');
   });
 });
 
@@ -42,9 +43,27 @@ gulp.task('test', ['build'], (done) => {
   runSequence('_test', done);
 });
 
-gulp.task('_test', () => {
+gulp.task('_test', (done) => {
   // Gulp Jasmine had weird behavior where it would run 0 specs on subsequent runs
-  child_process.spawnSync('npm run jasmine', [], {stdio: 'inherit'});
+  const proc = child_process.spawn('./node_modules/.bin/jasmine', [], {
+    env: Object.assign({}, process.env, {
+      NODE_PATH: `${process.cwd()}/dist`
+    })
+  });
+  proc.stdout.on('data', (b: Buffer) => {
+    process.stdout.write(b);
+  })
+  proc.stderr.on('data', (b: Buffer) => {
+    process.stderr.write(b);
+  })
+  proc.on('close', () => done())
+
+    // child_process.exec('./node_modules/.bin/jasmine', (err, stdout, stderr) => {
+    //   err
+    //   if (stdout) process.stdout.write(stdout);
+    //   if (stderr) process.stderr.write(stderr);
+    //   done();
+    // });
 });
 
 gulp.task('build', ['clean'], build);
