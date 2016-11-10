@@ -5,7 +5,7 @@ import { UniversalModule } from './universal-module';
 import { platformDynamicServer } from '@angular/platform-server';
 import { Jsonp } from '@angular/http';
 import { __platform_browser_private__ } from '@angular/platform-browser';
-import { ORIGIN_URL, getPlatformRef } from 'platform-node';
+import { ORIGIN_URL } from 'platform-node';
 
 @Component({
   selector: 'wat',
@@ -76,9 +76,16 @@ export class AnotherComponent {}
   bootstrap: [ App, AnotherComponent ],
   declarations: [ App, Wat, AnotherComponent ],
   imports: [
-    // UniversalModule,
-    CommonModule,
     UniversalModule,
+    CommonModule,
+    // UniversalModule.withConfig({
+    //   document: document,
+    //   originUrl: 'http://localhost:3000',
+    //   baseUrl: '/',
+    //   requestUrl: '/',
+    //   // preboot: false,
+    //   preboot: { appRoot: ['app'], uglify: true },
+    // }),
     FormsModule
   ]
 })
@@ -109,11 +116,10 @@ describe('Universal module', () => {
 
   describe('serialize', () => {
     fit('should serialize', (done) => {
-      const platform = getPlatformRef()//.bootstrapModule(MainModule)
-      // const platform = platformDynamicServer([
-      //   { provide: APP_BASE_HREF, useValue: 'localhost' },
-      //   { provide: ORIGIN_URL, useValue: '/'}
-      // ]);
+      const platform = platformDynamicServer([
+        { provide: APP_BASE_HREF, useValue: 'localhost' },
+        { provide: ORIGIN_URL, useValue: '/'}
+      ]);
       writeBody(`
         <app>
           Loading...
@@ -121,10 +127,7 @@ describe('Universal module', () => {
       `);
       platform
         .bootstrapModule(MainModule)
-        .then((ngModuleRef: NgModuleRef) => {
-          // return platform.serialize
-        })
-        .serializeModule(MainModule, config)
+        // .serializeModule(MainModule, config)
         .then((moduleRef: NgModuleRef<MainModule>) => {
           // console.log('\n -- serializeModule FINISHED --');
           console.log('bootstrapped moduleRef!');
