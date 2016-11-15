@@ -1,9 +1,3 @@
-#!/usr/bin/env node --debug=5858 --debug-brk
-
-const foo = require('reflect-metadata');
-const bar = require('../../../universal-polyfills/src/node');
-console.log('foobar', foo, bar)
-
 import { Component, NgModule, NgModuleRef } from '@angular/core';
 import { CommonModule/*, APP_BASE_HREF*/ } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -17,10 +11,6 @@ import {
 } from 'platform-node/parse5-adapter';
 
 declare var Zone;
-
-
-
-// jasmine.DEFAULT_TIMEOUT_INTERVAL = 2147483647;
 
 @Component({
   selector: 'wat',
@@ -98,7 +88,6 @@ export function makeDoc () {
   bootstrap: [ App, AnotherComponent ],
   declarations: [ App, Wat, AnotherComponent ],
   imports: [
-    // UniversalModule,
     CommonModule,
     UniversalModule,
     FormsModule,
@@ -125,44 +114,24 @@ export class MainModule {
   }
 }
 
-// describe('Universal module', () => {
-//   beforeEach(() => {
-//     const dom = __platform_browser_private__.getDOM();
-//     doc = dom.createHtmlDocument();
-//     Zone.current._properties['document'] = doc;
-//   });
-
-//   describe('withConfig()', () => {
-//     it('should return an object with ngModule and providers', () => {
-//       const withConfig = UniversalModule.withConfig();
-//       expect(withConfig.ngModule).toBe(UniversalModule);
-//       expect(withConfig.providers).toEqual([]);
-//     });
-//   });
-
-//   describe('serialize', () => {
-//     fit('should serialize', (done) => {
-//       const platform = platformUniversalDynamic();
-//       writeBody(`
-//         <app>
-//           Loading...
-//         </app>
-//       `);
-//       platform
-//         .serializeModule(MainModule)
-//         .then((html: string) => {
-//           console.log('bootstrapped moduleRef!', html);
-//           return html;
-//         })
-//         .then(done, done.fail);
-//     }, 2147483647);
-//   });
-// });
-
+describe('Universal module', () => {
+  beforeEach(() => {
     const dom = __platform_browser_private__.getDOM();
     doc = dom.createHtmlDocument();
     Zone.current._properties['document'] = doc;
-    const platform = platformUniversalDynamic();
+  });
+
+  describe('withConfig()', () => {
+    it('should return an object with ngModule and providers', () => {
+      const withConfig = UniversalModule.withConfig();
+      expect(withConfig.ngModule).toBe(UniversalModule);
+      expect(withConfig.providers).toEqual([]);
+    });
+  });
+
+  describe('serialize', () => {
+    fit('should serialize', (done) => {
+      const platform = platformUniversalDynamic();
       writeBody(`
         <app>
           Loading...
@@ -174,6 +143,10 @@ export class MainModule {
           console.log('bootstrapped moduleRef!', html);
           return html;
         })
+        .then(done, done.fail);
+    });
+  });
+});
 
 function writeBody(html: string): any {
   var dom = __platform_browser_private__.getDOM();
@@ -181,5 +154,4 @@ function writeBody(html: string): any {
   var body = dom.querySelector(doc, 'body');
   dom.setInnerHTML(body, html);
   return doc;
-
 }
