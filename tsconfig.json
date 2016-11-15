@@ -9,8 +9,8 @@
     "experimentalDecorators": true,
   	"sourceMap": true,
     "inlineSources": true,
-    "rootDir": ".",
-  	"outDir": "compiled/ngc",
+    "rootDir": "./modules",
+  	"outDir": "dist",
     "pretty": true,
     "stripInternal": false,
     "lib": ["es6", "dom"],
@@ -48,7 +48,11 @@
   "exclude": [
     "examples",
     "node_modules",
-    "compiled"
+    "compiled",
+    "dist",
+    "build-utils.ts",
+    "build-utils.spec.ts",
+    "gulpfile.ts"
   ],
 
   "compileOnSave": false,
