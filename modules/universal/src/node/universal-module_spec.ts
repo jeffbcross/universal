@@ -9,6 +9,7 @@ import { /*ORIGIN_URL,*/ platformNodeDynamic, NodeHttpModule } from 'platform-no
 import {
   Parse5DomAdapter
 } from 'platform-node/parse5-adapter';
+import * as parse5 from 'parse5';
 
 declare var Zone;
 
@@ -140,13 +141,25 @@ describe('Universal module', () => {
       platform
         .serializeModule(MainModule)
         .then((html: string) => {
-          console.log('bootstrapped moduleRef!', html);
-          return html;
+          const app = querySelector(html, 'app');
+          const text = getText(app);
+          expect(text).toContain('Hello World');
         })
         .then(done, done.fail);
     });
   });
 });
+
+function querySelector(html: string, selector: string) {
+  const adapter = __platform_browser_private__.getDOM();
+  var doc = parse5.parse(html, {treeAdapter: parse5.treeAdapters.htmlparser2});
+  return adapter.querySelector(doc, selector);
+}
+
+function getText(el: HTMLElement) {
+  const adapter = __platform_browser_private__.getDOM();
+  return adapter.getText(el);
+}
 
 function writeBody(html: string): any {
   var dom = __platform_browser_private__.getDOM();
