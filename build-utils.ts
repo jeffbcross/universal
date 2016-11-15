@@ -20,7 +20,8 @@ export function getPublishedModuleNames(allModules: string[]): string[] {
 
 export function getTargetFiles(testArg: boolean, argModule: string, config: TSConfig): string[] {
   // TODO(gdi2290): filter out build root level typescript
-  config.files = config.files.filter(file => !(/gulpfile|build-utils/.test(file)));
+  // config.files = config.files.filter(file => !(/gulpfile|build-utils/.test(file)));
+  config.files = glob.sync(`${nodePath.resolve(MODULES_PATH)}/**/*!(spec).ts`)
 
   if (testArg && !argModule) {
     return config.files.concat(getAllTestFiles());

@@ -1,11 +1,16 @@
 import { Component, NgModule, NgModuleRef } from '@angular/core';
-import { CommonModule, APP_BASE_HREF } from '@angular/common';
+import { CommonModule/*, APP_BASE_HREF*/ } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UniversalModule } from './universal-module';
-import { platformDynamicServer } from '@angular/platform-server';
+// import { platformDynamicServer } from '@angular/platform-server';
 import { Jsonp } from '@angular/http';
 import { __platform_browser_private__ } from '@angular/platform-browser';
-import { ORIGIN_URL, getPlatformRef } from 'platform-node';
+import { /*ORIGIN_URL,*/ platformNodeDynamic } from 'platform-node';
+import {
+  Parse5DomAdapter
+} from 'platform-node/parse5-adapter';
+
+declare var Zone;
 
 @Component({
   selector: 'wat',
@@ -99,6 +104,12 @@ export class MainModule {
 }
 
 describe('Universal module', () => {
+  beforeEach(() => {
+    Parse5DomAdapter.makeCurrent();
+    const dom = __platform_browser_private__.getDOM();
+    Zone.current._properties['document'] = dom.createHtmlDocument();
+  });
+
   describe('withConfig()', () => {
     it('should return an object with ngModule and providers', () => {
       const withConfig = UniversalModule.withConfig();
@@ -109,7 +120,7 @@ describe('Universal module', () => {
 
   describe('serialize', () => {
     fit('should serialize', (done) => {
-      const platform = getPlatformRef()//.bootstrapModule(MainModule)
+      const platform = platformNodeDynamic()//.bootstrapModule(MainModule)
       // const platform = platformDynamicServer([
       //   { provide: APP_BASE_HREF, useValue: 'localhost' },
       //   { provide: ORIGIN_URL, useValue: '/'}
@@ -121,10 +132,10 @@ describe('Universal module', () => {
       `);
       platform
         .bootstrapModule(MainModule)
-        .then((ngModuleRef: NgModuleRef) => {
-          // return platform.serialize
-        })
-        .serializeModule(MainModule, config)
+        // .then((ngModuleRef: NgModuleRef) => {
+        //   // return platform.serialize
+        // })
+        // .serializeModule(MainModule, config)
         .then((moduleRef: NgModuleRef<MainModule>) => {
           // console.log('\n -- serializeModule FINISHED --');
           console.log('bootstrapped moduleRef!');

@@ -3,11 +3,6 @@
   	"target": "es5",
   	"module": "commonjs",
   	"declaration": true,
-    "noImplicitAny": false,
-    "noUnusedLocals": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noUnusedParameters": true,
     "removeComments": true,
     "baseUrl": ".",
     "emitDecoratorMetadata": true,
@@ -22,6 +17,7 @@
     "types": [
       "node", "jasmine"
     ],
+    "moduleResolution": "node",
     "paths": {
       "angular2-express-engine": [
         "./modules/express-engine"
@@ -29,12 +25,11 @@
       "angular2-platform-node": [
         "./modules/platform-node"
       ],
-      "platform-node": [
-        "./modules/platform-node",
+      "platform-node/*": [
         "./modules/platform-node/*.ts"
       ],
-      "platform-node/parse5-adapter": [
-        "./modules/platform-node/parse5-adapter.ts"
+      "platform-node": [
+        "./modules/platform-node"
       ],
       "angular2-universal/browser": [
         "./modules/universal/browser"
@@ -50,31 +45,12 @@
       ]
     }
   },
-
-  "files": [
-    "gulpfile.ts",
-    "custom_typings/xhr2.d.ts",
-    "modules/express-engine/src/index.ts",
-    "modules/grunt-prerender/tasks/index.ts",
-    "modules/gulp-prerender/src/index.ts",
-    "modules/hapi-engine/src/index.ts",
-    "modules/universal-polyfills/src/zone-node/index.ts",
-    "modules/universal-polyfills/src/dev.ts",
-    "modules/universal-polyfills/src/ie.ts",
-    "modules/universal-polyfills/src/browser.ts",
-    "modules/universal-polyfills/src/node.ts",
-    "modules/universal-polyfills/src/prod.ts",
-    "modules/universal-polyfills/src/test.ts",
-    "modules/universal-polyfills/src/zone-browser.ts",
-    "modules/universal/src/node/universal-module_spec.ts",
-    "modules/universal/src/node/index.ts",
-    "modules/universal/src/browser/index.ts",
-    "modules/platform-node/parse5.d.ts",
-    "modules/universal/browser.ts",
-    "modules/universal/typings.d.ts",
-    "modules/universal/node.ts",
-    "modules/webpack-prerender/src/index.ts"
+  "exclude": [
+    "examples",
+    "node_modules",
+    "compiled"
   ],
+
   "compileOnSave": false,
   "buildOnSave": false,
   "atom": { "rewriteTsconfig": false },
